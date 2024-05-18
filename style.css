@@ -1,0 +1,81 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+.container{
+    position: relative; /* Establish this as the positioning context for absolute children */
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg,#153677,#4e085f);
+    padding: 10px;
+    overflow: hidden; /* Prevents content from spilling out */
+}
+.Grocery-Price-Comparator{
+    width: 100%;
+    max-width: 540px;
+    max-height: 250px;
+    background: #fff;
+    margin: 100px auto 20px;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+}
+.NoFrills{
+    position: absolute;
+    left: 20px; /* Start slightly in to avoid touching the very edge */
+    bottom: 100px;
+    width: 100%;
+    max-width: 300px;
+    max-height: 250px;
+    background: #fff;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+}
+.LobLaws{
+    position: absolute;
+    left: 340px; /* 300px width + 20px gap + 20px initial offset */
+    bottom: 100px;
+    width: 100%;
+    max-width: 300px;
+    max-height: 250px;
+    background: #fff;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+}
+.RealCanadianSuperstore{
+    position: absolute;
+    left: 660px; /* 300px width + 20px gap + previous offset */
+    bottom: 100px;
+    width: 100%;
+    max-width: 300px;
+    max-height: 250px;
+    background: #fff;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+}
+.BestPrices{
+    position: absolute;
+    left: 980px; /* 300px width + 20px gap + previous offset */
+    bottom: 100px;
+    width: 100%;
+    max-width: 300px;
+    max-height: 250px;
+    background: #fff;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+}
+.UpdateButton {
+    text-align: right; /* Aligns the button to the right */
+    padding: 20px; /* Adds some padding around the button */
+}
+
+.Update-Button {
+    padding: 20px 40px; /* Smaller padding for a smaller button */
+    font-size: 18px; /* Smaller font size for a small button */
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
