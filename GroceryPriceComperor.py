@@ -6,6 +6,7 @@ import time
 import re
 import os
 import datetime
+from pymongo import MongoClient
 
 def fetch_price(url, item, store):
     driver.get(url)
@@ -22,7 +23,6 @@ def fetch_price(url, item, store):
             all_prices.append({"Date": current_date, "Category": category, "Item": item, "Store": store, "Price": price})
     except Exception as e:
         print(f"Error fetching price for {item} at {store}: {e}")
-
 
 def print_all_prices(prices_list):
     for item in prices_list:
@@ -42,8 +42,25 @@ def append_to_excel(df, filename):
     else:
         df.to_excel(filename, index=False)
 
+def update_prices(prices_list):
+    for price in prices_list:
+        filter = {"Item": price["Item"], "Store": price["Store"]}
+        update = {
+            "$set": {
+                "Category": price["Category"],
+                "Price": price["Price"],
+                "Date": price["Date"]  # Update the date as well
+            }
+        }
+        collection.update_one(filter, update, upsert=True)
+
+# MongoDB setup
+client = MongoClient("mongodb://localhost:27017/")
+db = client.grocerydb
+collection = db.prices
+
 # Initialize WebDriver
-service = Service(executable_path="chromedriver.exe")
+service = Service(executable_path="chromedriverV25.exe")
 driver = webdriver.Chrome(service=service)
 
 # List to hold all prices
@@ -62,7 +79,7 @@ urls_items = [
     ("https://www.realcanadiansuperstore.ca/large-grade-a-eggs/p/20812144001_EA", "Eggs", "RCSS"),
     ("https://www.nofrills.ca/thick-slices-bread/p/20038335_EA", "Bread", "No Frills"),
     ("https://www.loblaws.ca/thick-slices-bread/p/20038335_EA", "Bread", "LobLaws"),
-    ("https://www.realcanadiansuperstore.ca/thick-slices-bread/p/20038335_EA", "Bread", "Real Canadian Super Store"),
+    ("https://www.realcanadiansuperstore.ca/thick-slices-bread/p/20038335_EA", "Bread", "RCSS"),
 ]
 
 # Fetch prices for each item at each store
@@ -80,10 +97,15 @@ print_all_prices(all_prices)
 print_cheapest_prices(all_prices)
 
 # Append the DataFrame to the Excel file
-filename = 'prices_data.xlsx'
-append_to_excel(df_prices,filename)
+filename = 'prices_data_test.xlsx'
+append_to_excel(df_prices, filename)
 
-df = pd.read_excel(filename, engine='openpyxl')
+# Update prices in MongoDB
+update_prices(all_prices)
 
-# Display the DataFrame
-print(df)
+# Verify by fetching and displaying data from MongoDB
+stored_data = collection.find({}, {'_id': 0})  # exclude '_id' field from output
+print("Data stored in MongoDB:")
+for item in stored_data:
+    print(item)
+
